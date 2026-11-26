@@ -286,6 +286,7 @@
   }
 
   .card-media.is-placeholder{display:grid;place-items:center}
+  .card-media.has-photo{aspect-ratio:1/1;background:#fff}
   .ph-emoji{font-size:44px;line-height:1;opacity:.9;filter:saturate(1.05)}
 
   .badge{
@@ -729,7 +730,7 @@
       ? '<img src="' + esc(deal.image) + '" alt="" loading="lazy" decoding="async">'
       : '<span class="ph-emoji" aria-hidden="true">' + esc(deal.emoji) + "</span>";
 
-    var mediaClass = "card-media" + (deal.image ? "" : " is-placeholder");
+    var mediaClass = "card-media" + (deal.image ? " has-photo" : " is-placeholder");
     var mediaAttrs = ' target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"';
 
     var mediaOpen = deal.url
