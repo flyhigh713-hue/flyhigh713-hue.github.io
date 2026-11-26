@@ -4,6 +4,46 @@
   "openChatLabel": "실시간 핫딜 오픈채팅방 입장하기",
   "deals": [
     {
+      "title": "익스트림 슬림쉐이크, 더블초코, 45g, 7포, 1세트",
+      "category": "먹거리",
+      "partner": "토스 쉐어링크",
+      "price": 10900,
+      "url": "https://toss.shopping/_m/vT76nbuv",
+      "image": "images/slimshake.jpg",
+      "hook": "30일 내 최저가! 평점 4.9(리뷰 1,370개) 내일도착 더블초코 쉐이크예요.",
+      "dateAdded": "2026-11-26"
+    },
+    {
+      "title": "AC+ 트러블 패치, 56매, 4개",
+      "category": "뷰티",
+      "partner": "토스 쉐어링크",
+      "price": 4600,
+      "url": "https://toss.shopping/_m/35FH2qik",
+      "image": "images/patch.jpg",
+      "hook": "스팟패치 1위! 56매 × 4개 4,600원, 평점 4.7 내일도착이에요.",
+      "dateAdded": "2026-11-26"
+    },
+    {
+      "title": "베라 무해력 4ZERO 뽑아쓰는 미용티슈, 250매, 6팩",
+      "category": "생활템",
+      "partner": "토스 쉐어링크",
+      "price": 4900,
+      "url": "https://toss.shopping/_m/576rzesf",
+      "image": "images/facialtissue.jpg",
+      "hook": "30일 내 최저가! 리뷰 5,393개 250매 6팩 4,900원 가성비 티슈예요.",
+      "dateAdded": "2026-11-26"
+    },
+    {
+      "title": "산들에담다 GAP 제주 노지 감귤, 특품, 대과, 5kg, 1박스",
+      "category": "먹거리",
+      "partner": "토스 쉐어링크",
+      "price": 6910,
+      "url": "https://toss.shopping/_m/3RIVk8Bf",
+      "image": "images/mandarin.jpg",
+      "hook": "30일 내 최저가! GAP 제주 노지 감귤 대과 5kg이 6,910원이에요.",
+      "dateAdded": "2026-11-26"
+    },
+    {
       "title": "안국건강 아이원 루테인 미니 100, 60정, 1박스",
       "category": "영양제",
       "partner": "쿠팡 파트너스",
