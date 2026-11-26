@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>똑딜 통계</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF5A3C'/%3E%3Cpath d='M18 40V28M28 40V20M38 40V31M48 40V24' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#FBF6F0;
+    --card:#FFFFFF;
+    --ink:#1E1A17;
+    --ink-2:#6A605A;
+    --ink-3:#A79C94;
+    --line:#EFE5DB;
+    --line-soft:#F4EDE5;
+    --accent:#FF5A3C;
+    --accent-dark:#E8442A;
+    --accent-soft:#FFECE5;
+    --blue:#2A6BF2;
+    --green:#2FA57B;
+    --radius:20px;
+    --shadow:0 1px 2px rgba(30,26,23,.05), 0 16px 32px -24px rgba(30,26,23,.45);
+    --pad:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  [hidden]{display:none !important}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 520px at 50% -280px, #FFEFE4 0%, rgba(255,239,228,0) 70%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+    font-size:16px;line-height:1.5;word-break:keep-all;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 var(--pad)}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:rgba(251,246,240,.88);
+    -webkit-backdrop-filter:blur(16px) saturate(1.3);
+    backdrop-filter:blur(16px) saturate(1.3);
+    border-bottom:1px solid rgba(239,229,219,.9);
+    padding-top:env(safe-area-inset-top);
+  }
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand-mark{
+    width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;
+    background:linear-gradient(145deg,#FF7A56,#FF4A2C);
+    box-shadow:0 8px 18px -10px rgba(255,74,44,.95);
+    flex:0 0 auto;
+  }
+  .brand-text strong{display:block;font-size:16px;font-weight:800;letter-spacing:-.4px;line-height:1.2}
+  .brand-text span{display:block;font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:-.1px}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    height:38px;padding:0 14px;border-radius:11px;
+    border:1px solid var(--line);background:#fff;
+    font-size:13px;font-weight:700;letter-spacing:-.2px;
+    transition:transform .15s ease,background .15s ease,border-color .15s ease;
+  }
+  .btn:hover{border-color:#E4D6C8}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:#1E1A17;color:#fff;border-color:#1E1A17}
+  .btn[disabled]{opacity:.55;cursor:default}
+
+  /* hero */
+  .hero{padding:24px 0 0}
+  .hero h1{margin:0;font-size:22px;font-weight:900;letter-spacing:-.7px}
+  .hero p{margin:6px 0 0;font-size:12.5px;font-weight:600;color:var(--ink-3);letter-spacing:-.1px}
+
+  /* period */
+  .period{display:flex;gap:8px;margin:16px 0 0;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+  .period::-webkit-scrollbar{display:none}
+  .seg{
+    flex:0 0 auto;height:36px;padding:0 15px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;color:var(--ink-2);
+    font-size:13px;font-weight:700;letter-spacing:-.2px;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .seg[aria-pressed="true"]{
+    background:linear-gradient(160deg,#FF6B48,#FF4A2C);border-color:transparent;color:#fff;
+    box-shadow:0 10px 20px -14px rgba(255,74,44,1);
+  }
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0 0}
+  @media (min-width:760px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
+  .kpi{
+    background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:15px 16px 16px;
+  }
+  .kpi-label{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--ink-3);letter-spacing:-.1px}
+  .kpi-label i{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+  .kpi-value{margin:9px 0 0;font-size:26px;font-weight:900;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1.1}
+  .kpi-value small{font-size:14px;font-weight:800;color:var(--ink-2);margin-left:1px}
+  .kpi-sub{margin:6px 0 0;font-size:11.5px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .kpi-sub b{color:var(--accent-dark);font-weight:800}
+
+  /* panels */
+  .panel{
+    margin-top:14px;padding:16px;background:var(--card);
+    border:1px solid var(--line-soft);border-radius:var(--radius);box-shadow:var(--shadow);
+  }
+  @media (min-width:760px){.panel{padding:20px}}
+  .panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .panel-head h2{margin:0;font-size:15px;font-weight:800;letter-spacing:-.35px}
+  .hint{font-size:11px;font-weight:600;color:var(--ink-3);letter-spacing:-.1px}
+  .chart-box{position:relative;height:270px;margin-top:10px}
+  .chart-box.tall{height:300px}
+  .chart-box.donut{height:250px}
+
+  /* table */
+  .table-wrap{margin-top:14px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  th{font-size:11px;font-weight:800;color:var(--ink-3);letter-spacing:-.1px;white-space:nowrap}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  th.num{text-align:right}
+  .rank{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:8px;background:#F7F1EA;color:#8B7E74;font-size:11.5px;font-weight:900}
+  .rank.top{background:var(--accent-soft);color:var(--accent-dark)}
+  .deal-name{display:block;font-weight:700;letter-spacing:-.2px;line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .chip{display:inline-block;margin-top:3px;padding:2px 7px;border-radius:7px;font-size:10.5px;font-weight:800;background:#F7F1EA;color:#8B7E74}
+  .chip.toss{background:#EAF0FE;color:#2A6BF2}
+  .chip.coupang{background:#FCEBE4;color:#D9451F}
+  .muted{color:var(--ink-3);font-weight:600}
+
+  /* banners */
+  .banner{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    margin-top:14px;padding:13px 15px;border-radius:14px;font-size:12.5px;font-weight:600;line-height:1.55;
+  }
+  .banner.error{background:#FFF1EE;border:1px solid #FFD6CC;color:#B33A20}
+  .banner.empty{background:#FFFDF8;border:1px dashed #E9DCCE;color:#8B7E74}
+  .banner .btn{margin-left:auto;height:32px;padding:0 12px;font-size:12px}
+
+  .note{
+    margin:20px 0 0;padding:14px 16px;border-radius:14px;
+    background:rgba(255,255,255,.7);border:1px solid var(--line);
+    font-size:11.5px;font-weight:500;line-height:1.7;color:#A1968E;letter-spacing:-.1px;
+  }
+  footer{margin-top:22px;padding:0 var(--pad) 34px;text-align:center;font-size:11px;font-weight:600;color:#BDB2AA;letter-spacing:-.1px}
+
+  .skel{position:relative;overflow:hidden;background:#F7F1EA;border-radius:8px;color:transparent}
+  .skel::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));
+    animation:sweep 1.2s infinite;
+  }
+  @keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M5 19V11M10 19V6M15 19V13M20 19V8"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>똑딜 통계</strong>
+        <span>성미님 전용 대시보드</span>
+      </span>
+    </div>
+    <button type="button" class="btn" id="refreshBtn">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/>
+      </svg>
+      새로고침
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>방문자 · 클릭 통계</h1>
+    <p id="updatedAt">불러오는 중…</p>
+  </section>
+
+  <div class="period" id="period" role="group" aria-label="조회 기간">
+    <button type="button" class="seg" data-days="7">7일</button>
+    <button type="button" class="seg" data-days="14" aria-pressed="true">14일</button>
+    <button type="button" class="seg" data-days="30">30일</button>
+    <button type="button" class="seg" data-days="all">전체</button>
+  </div>
+
+  <section class="kpis" aria-label="핵심 지표">
+    <div class="kpi">
+      <div class="kpi-label"><i></i>총 방문수 (PV)</div>
+      <p class="kpi-value" id="kpiVisits">–</p>
+      <p class="kpi-sub" id="kpiVisitsSub">페이지 조회 전체</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i style="background:#2A6BF2"></i>순 방문자 (UV)</div>
+      <p class="kpi-value" id="kpiUv">–</p>
+      <p class="kpi-sub" id="kpiUvSub">중복 제외 방문자</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i style="background:#F2A93B"></i>상품 클릭 (CTR)</div>
+      <p class="kpi-value" id="kpiDeal">–</p>
+      <p class="kpi-sub" id="kpiDealSub">클릭률 –</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i style="background:#2FA57B"></i>오픈채팅 클릭</div>
+      <p class="kpi-value" id="kpiChat">–</p>
+      <p class="kpi-sub" id="kpiChatSub">클릭률 –</p>
+    </div>
+  </section>
+
+  <div class="banner empty" id="emptyBanner" hidden>
+    <span>아직 기록된 방문이 없어요. 똑딜 사이트에 첫 방문이 생기면 여기에 쌓여요.</span>
+  </div>
+
+  <div class="banner error" id="errorBanner" hidden>
+    <span id="errorText">데이터를 불러오지 못했어요.</span>
+    <button type="button" class="btn" id="retryBtn">다시 시도</button>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>일별 방문 · 클릭 추이</h2>
+      <span class="hint">막대 = 방문/상품클릭/오픈채팅클릭 · 선 = 순 방문자</span>
+    </div>
+    <div class="chart-box"><canvas id="dailyChart" aria-label="일별 방문과 클릭 추이 차트" role="img"></canvas></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>상품별 클릭 · 클릭률</h2>
+      <span class="hint">클릭 많은 순</span>
+    </div>
+    <div class="chart-box tall"><canvas id="dealChart" aria-label="상품별 클릭 수와 클릭률 차트" role="img"></canvas></div>
+    <div class="table-wrap">
+      <table id="dealTable">
+        <thead>
+          <tr>
+            <th style="width:46px">순위</th>
+            <th>상품</th>
+            <th class="num">클릭</th>
+            <th class="num">CTR</th>
+          </tr>
+        </thead>
+        <tbody id="dealTableBody">
+          <tr><td colspan="4" class="muted">–</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>유입 경로</h2>
+      <span class="hint">방문 기준</span>
+    </div>
+    <div class="chart-box donut"><canvas id="refChart" aria-label="유입 경로 비율 차트" role="img"></canvas></div>
+  </section>
+
+  <p class="note">
+    방문자 수와 상품 클릭률(CTR)·오픈채팅 클릭률은 똑딜 사이트에서 실시간으로 집계돼요.
+    실제 구매 전환율은 쿠팡파트너스·토스 쉐어링크 리포트에서 확인할 수 있어요.
+    이 페이지는 검색에 노출되지 않으며, 똑딜 사이트 어디에도 링크가 없어요.
+  </p>
+</main>
+
+<footer>© <span id="year">2026</span> 똑딜 · 성미님 전용 통계</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* Apps Script 웹 앱 주소 (배포 후 채워집니다) */
+  var STATS_API = "https://script.google.com/macros/s/AKfycbx-kvWBYWPyHEHl73Bc2xxVtOnX8r8i7_2hpX9rqpsKb-UPTpSdbEaNL8UBrugbK-uY9Q/exec";
+  var PALETTE = ["#FF5A3C", "#2A6BF2", "#F2A93B", "#2FA57B", "#8A6BE0", "#D9451F", "#4C8BF5", "#A0AEC0", "#E58FBF", "#3FB8AF"];
+
+  var state = { days: "14", data: null, loading: false, requestId: 0 };
+  var charts = { daily: null, deals: null, refs: null };
+
+  var el = {
+    updatedAt: document.getElementById("updatedAt"),
+    period: document.getElementById("period"),
+    refreshBtn: document.getElementById("refreshBtn"),
+    kpiVisits: document.getElementById("kpiVisits"),
+    kpiVisitsSub: document.getElementById("kpiVisitsSub"),
+    kpiUv: document.getElementById("kpiUv"),
+    kpiUvSub: document.getElementById("kpiUvSub"),
+    kpiDeal: document.getElementById("kpiDeal"),
+    kpiDealSub: document.getElementById("kpiDealSub"),
+    kpiChat: document.getElementById("kpiChat"),
+    kpiChatSub: document.getElementById("kpiChatSub"),
+    emptyBanner: document.getElementById("emptyBanner"),
+    errorBanner: document.getElementById("errorBanner"),
+    errorText: document.getElementById("errorText"),
+    retryBtn: document.getElementById("retryBtn"),
+    dealTableBody: document.getElementById("dealTableBody"),
+    year: document.getElementById("year")
+  };
+
+  function num(n) {
+    var v = Number(n);
+    if (!isFinite(v)) v = 0;
+    return v.toLocaleString("ko-KR");
+  }
+
+  function pct(n) {
+    var v = Number(n);
+    if (!isFinite(v)) v = 0;
+    return (Math.round(v * 10) / 10).toLocaleString("ko-KR") + "%";
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function shortDate(iso) {
+    var p = String(iso || "").split("-");
+    if (p.length < 3) return String(iso || "");
+    return Number(p[1]) + "/" + Number(p[2]);
+  }
+
+  function partnerClass(partner) {
+    var v = String(partner || "");
+    if (/토스|toss/i.test(v)) return "chip toss";
+    if (/쿠팡|coupang/i.test(v)) return "chip coupang";
+    return "chip";
+  }
+
+  /* ---------- data ---------- */
+
+  function requestJson(url) {
+    return fetch(url, { cache: "no-store", redirect: "follow" }).then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    });
+  }
+
+  function requestJsonp(days) {
+    return new Promise(function (resolve, reject) {
+      var name = "__ddstats" + Date.now() + Math.floor(Math.random() * 1000);
+      var script = document.createElement("script");
+      var done = false;
+      var timer = setTimeout(function () { finish(new Error("응답 시간이 초과됐어요")); }, 20000);
+
+      function finish(err, data) {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        try { delete window[name]; } catch (e) { window[name] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (err) reject(err); else resolve(data);
+      }
+
+      window[name] = function (data) { finish(null, data); };
+      script.onerror = function () { finish(new Error("스크립트를 불러오지 못했어요")); };
+      script.src = STATS_API + "?action=stats&days=" + encodeURIComponent(days) + "&callback=" + name + "&_=" + Date.now();
+      document.head.appendChild(script);
+    });
+  }
+
+  function load() {
+    if (!STATS_API || STATS_API.indexOf("http") !== 0) {
+      showError("통계 주소가 아직 설정되지 않았어요.");
+      return;
+    }
+    var id = ++state.requestId;
+    state.loading = true;
+    el.refreshBtn.disabled = true;
+    el.updatedAt.textContent = "불러오는 중…";
+    hideError();
+
+    var days = state.days;
+    var url = STATS_API + "?action=stats&days=" + encodeURIComponent(days) + "&_=" + Date.now();
+
+    requestJson(url).catch(function () {
+      return requestJsonp(days);
+    }).then(function (data) {
+      if (id !== state.requestId) return;
+      if (!data || data.ok === false) throw new Error((data && data.error) || "잘못된 응답");
+      state.data = data;
+      render(data);
+    }).catch(function (err) {
+      if (id !== state.requestId) return;
+      showError("데이터를 불러오지 못했어요. " + (err && err.message ? err.message : ""));
+    }).then(function () {
+      if (id !== state.requestId) return;
+      state.loading = false;
+      el.refreshBtn.disabled = false;
+    });
+  }
+
+  function showError(message) {
+    el.errorText.textContent = message;
+    el.errorBanner.hidden = false;
+    el.updatedAt.textContent = "불러오기 실패";
+  }
+
+  function hideError() {
+    el.errorBanner.hidden = true;
+  }
+
+  /* ---------- render ---------- */
+
+  function periodLabel(data) {
+    var p = (data && data.period) || {};
+    if (p.days === "all") return "전체 기간";
+    return (p.start ? shortDate(p.start) : "") + " ~ " + (p.end ? shortDate(p.end) : "");
+  }
+
+  function render(data) {
+    var s = data.summary || {};
+
+    el.updatedAt.textContent = (data.generatedAt ? data.generatedAt : "") + " 기준 · " + periodLabel(data);
+
+    el.kpiVisits.textContent = num(s.totalVisits);
+    el.kpiVisitsSub.textContent = "페이지 조회 전체 · " + periodLabel(data);
+
+    el.kpiUv.textContent = num(s.uniqueVisitors);
+    el.kpiUvSub.innerHTML = "재방문률 <b>" + pct(s.totalVisits ? (1 - (s.uniqueVisitors / s.totalVisits)) * 100 : 0) + "</b>";
+
+    el.kpiDeal.textContent = num(s.totalDealClicks);
+    el.kpiDealSub.innerHTML = "클릭률 <b>" + pct(s.dealCtr) + "</b>";
+
+    el.kpiChat.textContent = num(s.totalOpenchatClicks);
+    el.kpiChatSub.innerHTML = "클릭률 <b>" + pct(s.openchatCtr) + "</b>";
+
+    var noData = !s.totalVisits && !s.totalDealClicks && !s.totalOpenchatClicks;
+    el.emptyBanner.hidden = !noData;
+
+    renderDaily(data.daily || []);
+    renderDeals(data.deals || [], s);
+    renderRefs(data.referrers || []);
+  }
+
+  function chartFont(size) {
+    return { family: "'Pretendard Variable',Pretendard,-apple-system,'Noto Sans KR',sans-serif", size: size || 11, weight: "600" };
+  }
+
+  function renderDaily(daily) {
+    var ctx = document.getElementById("dailyChart");
+    if (charts.daily) { charts.daily.destroy(); charts.daily = null; }
+
+    var labels = daily.map(function (d) { return shortDate(d.date); });
+    var visits = daily.map(function (d) { return d.visits; });
+    var uv = daily.map(function (d) { return d.uniqueVisitors; });
+    var dealClicks = daily.map(function (d) { return d.dealClicks; });
+    var chatClicks = daily.map(function (d) { return d.openchatClicks; });
+
+    var maxTicks = labels.length > 20 ? 8 : labels.length;
+
+    charts.daily = new Chart(ctx, {
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            type: "bar",
+            label: "방문",
+            data: visits,
+            backgroundColor: "rgba(255,90,60,.85)",
+            borderRadius: 6,
+            maxBarThickness: 26,
+            order: 3
+          },
+          {
+            type: "bar",
+            label: "상품 클릭",
+            data: dealClicks,
+            backgroundColor: "rgba(242,169,59,.9)",
+            borderRadius: 6,
+            maxBarThickness: 26,
+            order: 2
+          },
+          {
+            type: "bar",
+            label: "오픈채팅 클릭",
+            data: chatClicks,
+            backgroundColor: "rgba(47,165,123,.85)",
+            borderRadius: 6,
+            maxBarThickness: 26,
+            order: 1
+          },
+          {
+            type: "line",
+            label: "순 방문자",
+            data: uv,
+            borderColor: "#2A6BF2",
+            backgroundColor: "rgba(42,107,242,.10)",
+            borderWidth: 2,
+            tension: 0.35,
+            pointRadius: 2.5,
+            pointBackgroundColor: "#2A6BF2",
+            fill: false,
+            order: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "circle", font: chartFont(11), padding: 14 }
+          },
+          tooltip: {
+            backgroundColor: "rgba(30,26,23,.92)",
+            padding: 10,
+            cornerRadius: 10,
+            titleFont: chartFont(12),
+            bodyFont: chartFont(12),
+            callbacks: {
+              title: function (items) {
+                var i = items[0].dataIndex;
+                var d = daily[i];
+                return d ? d.date : "";
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { color: "#EFE5DB" },
+            ticks: { font: chartFont(10.5), color: "#A79C94", maxTicksLimit: maxTicks, maxRotation: 0, autoSkip: true }
+          },
+          y: {
+            beginAtZero: true,
+            grid: { color: "#F4EDE5" },
+            border: { display: false },
+            ticks: { font: chartFont(10.5), color: "#A79C94", precision: 0 }
+          }
+        }
+      }
+    });
+  }
+
+  function renderDeals(deals, summary) {
+    var ctx = document.getElementById("dealChart");
+    if (charts.deals) { charts.deals.destroy(); charts.deals = null; }
+
+    var top = deals.slice(0, 8);
+    var labels = top.map(function (d) {
+      var t = String(d.deal_title || d.deal_id || "상품");
+      return t.length > 22 ? t.slice(0, 22) + "…" : t;
+    });
+    var clicks = top.map(function (d) { return d.clicks; });
+    var ctr = top.map(function (d) { return d.ctr; });
+
+    charts.deals = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "클릭 수",
+            data: clicks,
+            backgroundColor: "rgba(255,90,60,.85)",
+            borderRadius: 6,
+            maxBarThickness: 22,
+            xAxisID: "x"
+          },
+          {
+            label: "CTR (%)",
+            data: ctr,
+            backgroundColor: "rgba(42,107,242,.75)",
+            borderRadius: 6,
+            maxBarThickness: 22,
+            xAxisID: "x2"
+          }
+        ]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "circle", font: chartFont(11), padding: 14 }
+          },
+          tooltip: {
+            backgroundColor: "rgba(30,26,23,.92)",
+            padding: 10,
+            cornerRadius: 10,
+            titleFont: chartFont(12),
+            bodyFont: chartFont(12),
+            callbacks: {
+              title: function (items) {
+                var d = top[items[0].dataIndex];
+                return d ? String(d.deal_title || d.deal_id || "상품") : "";
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            position: "bottom",
+            grid: { color: "#F4EDE5" },
+            border: { display: false },
+            ticks: { font: chartFont(10.5), color: "#A79C94", precision: 0 },
+            title: { display: true, text: "클릭 수", font: chartFont(10.5), color: "#A79C94" }
+          },
+          x2: {
+            beginAtZero: true,
+            position: "top",
+            grid: { display: false },
+            border: { display: false },
+            ticks: { font: chartFont(10.5), color: "#2A6BF2", callback: function (v) { return v + "%"; } },
+            title: { display: true, text: "CTR", font: chartFont(10.5), color: "#2A6BF2" }
+          },
+          y: {
+            grid: { display: false },
+            border: { display: false },
+            ticks: { font: chartFont(10.5), color: "#6A605A" }
+          }
+        }
+      }
+    });
+
+    /* 순위 표 */
+    if (!deals.length) {
+      el.dealTableBody.innerHTML = '<tr><td colspan="4" class="muted" style="padding:16px 8px">아직 상품 클릭이 없어요. 상품 카드를 누르면 여기에 순위가 쌓여요.</td></tr>';
+      return;
+    }
+    el.dealTableBody.innerHTML = deals.map(function (d, i) {
+      var title = d.deal_title || d.deal_id || "상품";
+      var partner = d.partner ? '<span class="' + partnerClass(d.partner) + '">' + esc(d.partner) + "</span>" : "";
+      return "<tr>" +
+        '<td><span class="rank' + (i < 3 ? " top" : "") + '">' + (i + 1) + "</span></td>" +
+        '<td><span class="deal-name">' + esc(title) + "</span>" + partner + "</td>" +
+        '<td class="num">' + num(d.clicks) + "</td>" +
+        '<td class="num">' + pct(d.ctr) + "</td>" +
+        "</tr>";
+    }).join("");
+  }
+
+  function renderRefs(referrers) {
+    var ctx = document.getElementById("refChart");
+    if (charts.refs) { charts.refs.destroy(); charts.refs = null; }
+
+    var items = referrers.slice(0, 8);
+    var labels = items.map(function (r) { return r.source || "직접 유입"; });
+    var counts = items.map(function (r) { return r.count; });
+    var total = counts.reduce(function (a, b) { return a + b; }, 0);
+
+    charts.refs = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: labels.length ? labels : ["데이터 없음"],
+        datasets: [{
+          data: counts.length ? counts : [1],
+          backgroundColor: counts.length ? labels.map(function (_, i) { return PALETTE[i % PALETTE.length]; }) : ["#F4EDE5"],
+          borderColor: "#fff",
+          borderWidth: 2,
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "62%",
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "circle", font: chartFont(11), padding: 12 }
+          },
+          tooltip: {
+            backgroundColor: "rgba(30,26,23,.92)",
+            padding: 10,
+            cornerRadius: 10,
+            titleFont: chartFont(12),
+            bodyFont: chartFont(12),
+            callbacks: {
+              label: function (item) {
+                if (!counts.length) return " 아직 데이터가 없어요";
+                var v = Number(item.raw) || 0;
+                var share = total ? Math.round((v / total) * 1000) / 10 : 0;
+                return " " + num(v) + "명 · " + share + "%";
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  /* ---------- events ---------- */
+
+  el.period.addEventListener("click", function (event) {
+    var btn = event.target.closest(".seg");
+    if (!btn) return;
+    var days = btn.getAttribute("data-days");
+    if (!days || days === state.days) return;
+    state.days = days;
+    Array.prototype.forEach.call(el.period.querySelectorAll(".seg"), function (b) {
+      b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+    });
+    load();
+  });
+
+  el.refreshBtn.addEventListener("click", load);
+  el.retryBtn.addEventListener("click", load);
+
+  el.year.textContent = String(new Date().getFullYear());
+
+  if (window.Chart) {
+    Chart.defaults.font.family = "'Pretendard Variable',Pretendard,-apple-system,'Noto Sans KR',sans-serif";
+    Chart.defaults.color = "#6A605A";
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

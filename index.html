@@ -527,6 +527,8 @@
   "use strict";
 
   var DEFAULT_TITLE = "똑딜";
+  /* 방문자·클릭 통계 (Apps Script 웹 앱). 값이 비어 있으면 추적하지 않습니다. */
+  var STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbx-kvWBYWPyHEHl73Bc2xxVtOnX8r8i7_2hpX9rqpsKb-UPTpSdbEaNL8UBrugbK-uY9Q/exec";
   var BASE_CATEGORIES = ["전체", "영양제", "생활템", "뷰티", "기타"];
   var CATEGORY_EMOJI = { "영양제": "💊", "생활템": "🧺", "먹거리": "🍽️", "뷰티": "✨", "기타": "🛍️" };
   var DISCLOSURE_FULL = "이 포스팅은 토스 쉐어링크 / 쿠팡 파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 제공받습니다.";
@@ -565,6 +567,15 @@
 
   function text(value) {
     return typeof value === "string" ? value.trim() : "";
+  }
+
+  function hashKey(value) {
+    var str = String(value || "");
+    var h = 5381;
+    for (var i = 0; i < str.length; i++) {
+      h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    }
+    return "d" + (h >>> 0).toString(36);
   }
 
   function safeUrl(value) {
@@ -678,6 +689,7 @@
 
     return {
       index: index,
+      id: hashKey(title),
       title: title,
       category: category,
       partner: partner,
@@ -760,7 +772,10 @@
       ? deal.partner.name + " 활동의 일환으로 일정액의 수수료를 제공받습니다."
       : "파트너스 활동의 일환으로 일정액의 수수료를 제공받을 수 있습니다.";
 
-    return '<article class="card" style="--d:' + Math.min(order, 8) * 45 + 'ms">' +
+    return '<article class="card" style="--d:' + Math.min(order, 8) * 45 + 'ms"' +
+      ' data-deal-id="' + esc(deal.id) + '"' +
+      ' data-deal-title="' + esc(deal.title) + '"' +
+      ' data-partner="' + esc(deal.partner.label) + '">' +
       mediaOpen + mediaInner + badge + newChip + mediaClose +
       '<div class="card-body">' +
         '<div class="card-main">' +
@@ -886,7 +901,82 @@
       });
   }
 
+  /* ---------- 통계 추적 (화면에는 아무것도 보이지 않습니다) ---------- */
+
+  var VID_KEY = "dd_vid";
+
+  function visitorId() {
+    try {
+      var v = localStorage.getItem(VID_KEY);
+      if (!v || !/^[a-z0-9]{8,24}$/.test(v)) {
+        v = "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+        localStorage.setItem(VID_KEY, v);
+      }
+      return v;
+    } catch (e) {
+      return "anon";
+    }
+  }
+
+  function refSource() {
+    var ref = document.referrer || "";
+    if (!ref) return "직접 유입";
+    try {
+      var host = new URL(ref).hostname.replace(/^www\./, "");
+      var mine = location.hostname.replace(/^www\./, "");
+      if (!host || host === mine) return "직접 유입";
+      if (/(^|\.)threads\.(net|com)$/.test(host)) return "스레드";
+      if (/(^|\.)instagram\.com$/.test(host)) return "인스타그램";
+      if (/(^|\.)(kakao\.com|kakaocorp\.com)$/.test(host)) return "카카오톡";
+      if (/(^|\.)t\.co$/.test(host)) return "X(트위터)";
+      if (/(^|\.)youtube\.com$/.test(host)) return "유튜브";
+      if (/(^|\.)facebook\.com$/.test(host)) return "페이스북";
+      if (/(^|\.)naver\.com$/.test(host)) return "네이버";
+      if (/(^|\.)(google\.[a-z.]+)$/.test(host)) return "구글";
+      if (/(^|\.)(daum\.net|tistory\.com)$/.test(host)) return "다음·티스토리";
+      return host;
+    } catch (e) {
+      return "기타";
+    }
+  }
+
+  function track(type, extra) {
+    if (!STATS_ENDPOINT || STATS_ENDPOINT.indexOf("http") !== 0) return;
+    var url = STATS_ENDPOINT +
+      "?action=log&type=" + encodeURIComponent(type) +
+      "&vid=" + encodeURIComponent(visitorId()) +
+      "&ref=" + encodeURIComponent(refSource());
+    if (extra) {
+      if (extra.deal_id) url += "&deal_id=" + encodeURIComponent(extra.deal_id);
+      if (extra.deal_title) url += "&deal_title=" + encodeURIComponent(extra.deal_title);
+      if (extra.partner) url += "&partner=" + encodeURIComponent(extra.partner);
+    }
+    url += "&_=" + Date.now();
+    try {
+      if (window.fetch) {
+        fetch(url, { mode: "no-cors", keepalive: true, cache: "no-store" })['catch'](function () {});
+      } else {
+        var img = new Image();
+        img.src = url;
+      }
+    } catch (e) {}
+  }
+
   /* ---------- events ---------- */
+
+  el.list.addEventListener("click", function (event) {
+    var card = event.target.closest ? event.target.closest(".card") : null;
+    if (!card) return;
+    if (!event.target.closest("a")) return;
+    track("deal_click", {
+      deal_id: card.getAttribute("data-deal-id") || "",
+      deal_title: card.getAttribute("data-deal-title") || "",
+      partner: card.getAttribute("data-partner") || ""
+    });
+  });
+
+  el.chatLink.addEventListener("click", function () { track("openchat_click"); });
+  el.emptyChatLink.addEventListener("click", function () { track("openchat_click"); });
 
   el.chips.addEventListener("click", function (event) {
     var btn = event.target.closest(".chip");
@@ -931,6 +1021,7 @@
   el.year.textContent = String(new Date().getFullYear());
   renderChips();
   loadDeals();
+  track("visit");
 })();
 </script>
 </body>
