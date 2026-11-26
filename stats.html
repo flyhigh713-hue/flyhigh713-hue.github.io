@@ -565,25 +565,31 @@
     var ctr = top.map(function (d) { return d.ctr; });
 
     charts.deals = new Chart(ctx, {
-      type: "bar",
       data: {
         labels: labels,
         datasets: [
           {
+            type: "bar",
             label: "클릭 수",
             data: clicks,
             backgroundColor: "rgba(255,90,60,.85)",
             borderRadius: 6,
-            maxBarThickness: 22,
-            xAxisID: "x"
+            maxBarThickness: 20,
+            order: 2
           },
           {
+            type: "line",
             label: "CTR (%)",
             data: ctr,
-            backgroundColor: "rgba(42,107,242,.75)",
-            borderRadius: 6,
-            maxBarThickness: 22,
-            xAxisID: "x2"
+            xAxisID: "x2",
+            borderColor: "#2A6BF2",
+            backgroundColor: "#2A6BF2",
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointStyle: "circle",
+            order: 1
           }
         ]
       },
