@@ -4,6 +4,48 @@
   "openChatLabel": "실시간 핫딜 오픈채팅방 입장하기",
   "deals": [
     {
+      "title": "한입과득 청송 부사사과, 가정용, 2kg, 1박스",
+      "category": "먹거리",
+      "partner": "토스쇼핑",
+      "price": 6390,
+      "url": "https://toss.shopping/_m/NCkbrKd",
+      "image": "images/apple.jpg",
+      "hook": "오늘출발! 2kg 6,390원, 평점 4.3(리뷰 1,384개) 내일 도착하는 청송 부사사과예요.",
+      "dateAdded": "2026-11-27"
+    },
+    {
+      "title": "햇반 흑미밥 작은공기, 130g, 12개",
+      "category": "먹거리",
+      "partner": "쿠팡",
+      "price": 10900,
+      "originalPrice": 27560,
+      "url": "https://link.coupang.com/a/i0sLqnstjg",
+      "image": "images/haetban.jpg",
+      "hook": "60% 할인! 한 달에 8,000명 넘게 산 밥, 12개 10,900원에 오늘 도착해요.",
+      "dateAdded": "2026-11-27"
+    },
+    {
+      "title": "더건강플러스 엑스트라버진 올리브오일, 1L, 1개",
+      "category": "먹거리",
+      "partner": "토스쇼핑",
+      "price": 10900,
+      "url": "https://toss.shopping/_m/B3pR07Hr",
+      "image": "images/oliveoil.jpg",
+      "hook": "30일 내 최저가! 1L 10,900원, 평점 4.7(리뷰 12,244개) 올리브유 판매 5위예요.",
+      "dateAdded": "2026-11-27"
+    },
+    {
+      "title": "퍼실 딥클린 초미세세탁 라벤더젤 겸용 액체세제 리필, 2L, 1개",
+      "category": "생활템",
+      "partner": "쿠팡",
+      "price": 8270,
+      "originalPrice": 22900,
+      "url": "https://link.coupang.com/a/i0sOxscaSO",
+      "image": "images/persil.jpg",
+      "hook": "63% 할인! 2L 8,270원, 밤 9시 전 주문하면 내일 새벽에 도착해요.",
+      "dateAdded": "2026-11-27"
+    },
+    {
       "title": "익스트림 슬림쉐이크, 더블초코, 45g, 7포, 1세트",
       "category": "먹거리",
       "partner": "토스쇼핑",
