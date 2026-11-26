@@ -1,0 +1,47 @@
+{
+  "siteTitle": "오늘의 핫딜",
+  "openChatUrl": "https://open.kakao.com/o/example-room",
+  "openChatLabel": "실시간 핫딜 오픈채팅방 입장하기",
+  "deals": [
+    {
+      "id": "preview-1",
+      "title": "예시 상품 A · 영양제 (레이아웃 확인용)",
+      "category": "영양제",
+      "partner": "쿠팡파트너스",
+      "price": 12900,
+      "originalPrice": 22000,
+      "url": "https://example.com/deal-a",
+      "hook": "한 줄 소감이 이 자리에 들어갑니다. 두 줄까지만 보이고 길면 말줄임 처리됩니다.",
+      "dateAdded": "2026-11-26"
+    },
+    {
+      "id": "preview-2",
+      "title": "예시 상품 B · 생활템 (레이아웃 확인용)",
+      "category": "생활템",
+      "partner": "토스 쉐어링크",
+      "price": "9,900원",
+      "url": "https://example.com/deal-b",
+      "hook": "정가 없이 할인가만 넣었을 때의 표시를 확인합니다.",
+      "dateAdded": "2026-11-25"
+    },
+    {
+      "id": "preview-3",
+      "title": "예시 상품 C · 뷰티 (레이아웃 확인용) 아주 긴 상품명이 두 줄을 넘어가면 이렇게 잘립니다 그래서 확인이 필요합니다",
+      "category": "뷰티",
+      "partner": "토스 쉐어링크",
+      "price": 18900,
+      "originalPrice": 32000,
+      "url": "https://example.com/deal-c",
+      "hook": "소감이 아주 길어지면 두 줄에서 잘리는지 보려고 길게 적어 봅니다. 카드마다 높이가 들쭉날쭉하지 않은지, 버튼이 아래에 잘 붙는지 확인하는 중입니다.",
+      "dateAdded": "2026-11-21"
+    },
+    {
+      "id": "preview-4",
+      "title": "예시 상품 D · 기타 (가격·링크 없음)",
+      "category": "기타",
+      "partner": "",
+      "hook": "",
+      "dateAdded": "2026-11-18"
+    }
+  ]
+}
