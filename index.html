@@ -643,8 +643,9 @@
   function partnerInfo(raw) {
     var value = text(raw);
     if (!value) return { label: "", cls: "other", name: "" };
-    if (/토스|toss/i.test(value)) return { label: "토스 쉐어링크", cls: "toss", name: "토스 쉐어링크" };
-    if (/쿠팡|coupang/i.test(value)) return { label: "쿠팡 파트너스", cls: "coupang", name: "쿠팡 파트너스" };
+    // label = 카드 상단 배지에 보이는 표시명, name = 하단 대가성 공시에 쓰는 정식 제휴 프로그램명
+    if (/토스|toss/i.test(value)) return { label: "토스쇼핑", cls: "toss", name: "토스 쉐어링크" };
+    if (/쿠팡|coupang/i.test(value)) return { label: "쿠팡", cls: "coupang", name: "쿠팡 파트너스" };
     return { label: value, cls: "other", name: value };
   }
 
