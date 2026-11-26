@@ -278,7 +278,7 @@
   }
 
   .card-media img{
-    width:100%;height:100%;object-fit:cover;
+    width:100%;height:100%;object-fit:contain;background:#fff;
     transition:transform .5s cubic-bezier(.22,.8,.3,1);
   }
   @media (hover:hover){
@@ -525,7 +525,7 @@
 
   var DEFAULT_TITLE = "똑딜";
   var BASE_CATEGORIES = ["전체", "영양제", "생활템", "뷰티", "기타"];
-  var CATEGORY_EMOJI = { "영양제": "💊", "생활템": "🧺", "뷰티": "✨", "기타": "🛍️" };
+  var CATEGORY_EMOJI = { "영양제": "💊", "생활템": "🧺", "먹거리": "🍽️", "뷰티": "✨", "기타": "🛍️" };
   var DISCLOSURE_FULL = "이 포스팅은 토스 쉐어링크 / 쿠팡 파트너스 활동의 일환으로 이에 따른 일정액의 수수료를 제공받습니다.";
 
   var state = { deals: [], category: "전체", query: "" };
@@ -568,6 +568,15 @@
     var raw = text(value);
     if (!raw) return "";
     if (/^https?:\/\//i.test(raw)) return raw;
+    return "";
+  }
+
+  /* images may also be a relative path inside this site (e.g. images/lutein.jpg) */
+  function safeImageUrl(value) {
+    var raw = text(value);
+    if (!raw) return "";
+    if (/^https?:\/\//i.test(raw)) return raw;
+    if (/^[A-Za-z0-9._\/-]+$/.test(raw) && raw.indexOf("..") === -1 && raw.charAt(0) !== "/") return raw;
     return "";
   }
 
@@ -654,7 +663,7 @@
 
     var rate = "";
     if (hasNumericPrice && wasPrice !== null && wasPrice > price) {
-      rate = Math.round((1 - price / wasPrice) * 100) + "%";
+      rate = Math.floor((1 - price / wasPrice) * 100) + "%";
     } else if (raw.discount != null && text(raw.discount)) {
       var d = text(raw.discount);
       rate = /%$/.test(d) ? d : d + "%";
@@ -675,7 +684,7 @@
       hook: text(raw.hook || raw.review || raw.summary || raw.description || raw.memo),
       dateRaw: text(dateRaw),
       ts: ts,
-      image: safeUrl(raw.image || raw.imageUrl || raw.thumbnail || raw.photo),
+      image: safeImageUrl(raw.image || raw.imageUrl || raw.thumbnail || raw.photo),
       emoji: CATEGORY_EMOJI[category] || "🛍️"
     };
   }
