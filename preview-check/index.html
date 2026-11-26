@@ -78,15 +78,15 @@
   }
 
   .header-inner{
-    display:flex;flex-direction:column;gap:12px;
-    padding-top:14px;padding-bottom:12px;
+    display:flex;flex-direction:column;gap:10px;
+    padding-top:10px;padding-bottom:10px;
   }
 
   .brand{display:flex;align-items:center;gap:11px;min-width:0}
 
   .brand-mark{
     flex:0 0 auto;
-    width:40px;height:40px;border-radius:14px;
+    width:36px;height:36px;border-radius:12px;
     display:grid;place-items:center;
     color:#fff;
     background:linear-gradient(145deg,#FF7A56,#FF4A2C);
@@ -96,7 +96,7 @@
   .brand-text{display:flex;flex-direction:column;min-width:0}
 
   .brand-text strong{
-    font-size:19px;font-weight:800;letter-spacing:-.5px;line-height:1.25;
+    font-size:17.5px;font-weight:800;letter-spacing:-.5px;line-height:1.25;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
 
@@ -109,7 +109,7 @@
 
   .search{
     display:flex;align-items:center;gap:9px;
-    height:46px;padding:0 14px;
+    height:44px;padding:0 13px;
     background:#fff;
     border:1px solid var(--line);
     border-radius:14px;
@@ -147,6 +147,7 @@
     .header-inner{flex-direction:row;align-items:center;justify-content:space-between;gap:28px;padding-top:16px;padding-bottom:16px}
     .search-wrap{flex:0 1 380px;width:380px}
     .brand-text strong{font-size:21px}
+    .brand-mark{width:40px;height:40px;border-radius:14px}
   }
 
   /* ---------- main ---------- */
@@ -314,6 +315,8 @@
     display:flex;flex-direction:column;flex:1 1 auto;
     padding:14px 15px 16px;
   }
+
+  .card-main{display:flex;flex-direction:column;flex:1 1 auto}
 
   .meta{
     display:flex;align-items:center;gap:7px;flex-wrap:wrap;
@@ -745,13 +748,15 @@
     return '<article class="card" style="--d:' + Math.min(order, 8) * 45 + 'ms">' +
       mediaOpen + mediaInner + badge + newChip + mediaClose +
       '<div class="card-body">' +
-        '<div class="meta">' +
-          '<span class="cat">' + esc(deal.category) + "</span>" +
-          (dateTxt ? '<span class="dot" aria-hidden="true">·</span><span>' + esc(dateTxt) + "</span>" : "") +
+        '<div class="card-main">' +
+          '<div class="meta">' +
+            '<span class="cat">' + esc(deal.category) + "</span>" +
+            (dateTxt ? '<span class="dot" aria-hidden="true">·</span><span>' + esc(dateTxt) + "</span>" : "") +
+          "</div>" +
+          '<h3 class="card-title">' + esc(deal.title) + "</h3>" +
+          (deal.hook ? '<p class="hook">' + esc(deal.hook) + "</p>" : "") +
+          priceHtml +
         "</div>" +
-        '<h3 class="card-title">' + esc(deal.title) + "</h3>" +
-        (deal.hook ? '<p class="hook">' + esc(deal.hook) + "</p>" : "") +
-        priceHtml +
         cta +
         '<p class="disclosure">' + esc(disclosure) + "</p>" +
       "</div>" +
