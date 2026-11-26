@@ -1,6 +1,6 @@
-# 오늘의 핫딜 🛒
+# 똑딜 🛒
 
-직접 골라 담은 오늘의 특가를 모아 두는 핫딜 모음 사이트입니다.
+직접 골라 담은 생활·먹거리 특가를 모아 두는 핫딜 모음 사이트, '똑딜'입니다.
 GitHub Pages로 https://flyhigh713-hue.github.io/ 에서 열립니다.
 
 - `index.html` — 사이트 전체 (디자인 + 화면 로직, 단일 파일)
@@ -13,7 +13,7 @@ GitHub Pages로 https://flyhigh713-hue.github.io/ 에서 열립니다.
 
 ```json
 {
-  "siteTitle": "오늘의 핫딜",
+  "siteTitle": "똑딜",
   "openChatUrl": "",
   "openChatLabel": "실시간 핫딜 오픈채팅방 입장하기",
   "deals": [
