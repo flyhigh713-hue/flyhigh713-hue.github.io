@@ -4,34 +4,66 @@
   "openChatLabel": "실시간 핫딜 오픈채팅방 입장하기",
   "deals": [
     {
+      "title": "예진원 국내산 ABC주스, 80ml, 35개",
+      "category": "먹거리",
+      "partner": "토스쇼핑",
+      "price": 6900,
+      "url": "https://toss.shopping/_m/pYuMubBw",
+      "image": "images/abcjuice.jpg",
+      "hook": "평점 4.7(리뷰 18,903개)! 사과·비트·당근 100% 착즙 35포 6,900원, 30일 내 최저가예요.",
+      "dateAdded": "2026-11-28"
+    },
+    {
+      "title": "코멧 포켓용 핫팩, 100g, 15개",
+      "category": "생활템",
+      "partner": "쿠팡",
+      "price": 5000,
+      "originalPrice": 8600,
+      "url": "https://link.coupang.com/a/i16N20DXqe",
+      "image": "images/hotpack.jpg",
+      "hook": "41% 할인! 15개 5,000원(한 개 333원꼴), 최고 70℃까지 올라가는 겨울 필수템이에요.",
+      "dateAdded": "2026-11-28"
+    },
+    {
+      "title": "삼립 호빵 묶음 (단팥 + 꿀고구마 + 야채), 380g, 3봉",
+      "category": "먹거리",
+      "partner": "쿠팡",
+      "price": 13800,
+      "originalPrice": 20600,
+      "url": "https://link.coupang.com/a/i16KFw73ZI",
+      "image": "images/hobbang.jpg",
+      "hook": "33% 할인! 단팥·꿀고구마·야채 3봉 13,800원, 전자레인지에 데우면 바로 먹는 겨울 간식이에요.",
+      "dateAdded": "2026-11-28"
+    },
+    {
+      "title": "리벤스 소프트 클린 화장실 비데티슈, 60매, 10팩",
+      "category": "생활템",
+      "partner": "토스쇼핑",
+      "price": 8770,
+      "url": "https://toss.shopping/_m/TsDv6ygf",
+      "image": "images/bidetissue.jpg",
+      "hook": "평점 4.7(리뷰 906개) 베스트판매자! 60매 10팩 8,770원, 30일 내 최저가예요.",
+      "dateAdded": "2026-11-28"
+    },
+    {
       "title": "한입과득 청송 부사사과, 가정용, 2kg, 1박스",
       "category": "먹거리",
       "partner": "토스쇼핑",
-      "price": 6390,
+      "price": 6900,
       "url": "https://toss.shopping/_m/NCkbrKd",
       "image": "images/apple.jpg",
-      "hook": "오늘출발! 2kg 6,390원, 평점 4.3(리뷰 1,384개) 내일 도착하는 청송 부사사과예요.",
+      "hook": "2kg 6,900원, 평점 4.3(리뷰 1,384개) 내일 도착하는 청송 부사사과예요.",
       "dateAdded": "2026-11-27"
     },
     {
       "title": "햇반 흑미밥 작은공기, 130g, 12개",
       "category": "먹거리",
       "partner": "쿠팡",
-      "price": 10900,
+      "price": 10980,
       "originalPrice": 27560,
       "url": "https://link.coupang.com/a/i0sLqnstjg",
       "image": "images/haetban.jpg",
-      "hook": "60% 할인! 한 달에 8,000명 넘게 산 밥, 12개 10,900원에 오늘 도착해요.",
-      "dateAdded": "2026-11-27"
-    },
-    {
-      "title": "더건강플러스 엑스트라버진 올리브오일, 1L, 1개",
-      "category": "먹거리",
-      "partner": "토스쇼핑",
-      "price": 10900,
-      "url": "https://toss.shopping/_m/B3pR07Hr",
-      "image": "images/oliveoil.jpg",
-      "hook": "30일 내 최저가! 1L 10,900원, 평점 4.7(리뷰 12,244개) 올리브유 판매 5위예요.",
+      "hook": "60% 할인! 한 달에 8,000명 넘게 산 밥, 12개 10,980원이에요.",
       "dateAdded": "2026-11-27"
     },
     {
@@ -44,17 +76,6 @@
       "image": "images/persil.jpg",
       "hook": "63% 할인! 2L 8,270원, 밤 9시 전 주문하면 내일 새벽에 도착해요.",
       "dateAdded": "2026-11-27"
-    },
-    {
-      "title": "안국건강 아이원 루테인 미니 100, 60정, 1박스",
-      "category": "영양제",
-      "partner": "쿠팡",
-      "price": 9400,
-      "originalPrice": 30000,
-      "url": "https://link.coupang.com/a/iYZCWS2Fie",
-      "image": "images/lutein.jpg",
-      "hook": "로켓배송 68% 특가! 상품 페이지에서 2,820원 쿠폰 받으면 6,580원(78% 할인)이에요.",
-      "dateAdded": "2026-11-26"
     }
   ]
 }
